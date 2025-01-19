@@ -84,7 +84,7 @@ class SendingReminder:
         today = dt.date.today()
         tomorrow = today +  dt.timedelta(days=1)
         godz = dt.datetime.now().strftime("%H:%M")
-        print(f"Dzisiejsza data: {today.isoformat()}")
+        # print(f"Dzisiejsza data: {today.isoformat()}")
         zadania = tasks_data.get('zadania', [])
         for zadanie in zadania:
             email = zadanie.get('email')
