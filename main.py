@@ -31,9 +31,10 @@ def main():
         print("5. Sort Tasks by Priority or Deadline")
         print("6. View Task Statistics")
         print("7. Manage Categories")
-        print("8. Exit")
+        print("8. Complete a Task")
+        print("9. Exit")
 
-        choice = input("Choose an option (1-8): ")
+        choice = input("Choose an option (1-9): ")
 
         if choice == "1":
             # Add a task
@@ -115,6 +116,26 @@ def main():
                     print(f"- {category}")
 
         elif choice == "8":
+            # Complete a task
+            task_id = int(input("Enter the task ID to complete: "))
+            task_found = False
+
+            for task in filtry_sortowanie.tasks:
+                if task["id"] == task_id:
+                    task_found = True
+                    if task["status"] == "nie zrobione":
+                        task["status"] = "zrobione"
+                        with open(TASKS_FILE, 'w', encoding='utf-8') as file:
+                            json.dump({"zadania": filtry_sortowanie.tasks}, file, ensure_ascii=False, indent=4)
+                        print(f"Task ID {task_id} has been marked as completed.")
+                    else:
+                        print(f"Task ID {task_id} is already marked as completed.")
+                    break
+
+            if not task_found:
+                print(f"Task with ID {task_id} not found.")
+
+        elif choice == "9":
             # Exit the program
             print("Exiting... Goodbye!")
             break
