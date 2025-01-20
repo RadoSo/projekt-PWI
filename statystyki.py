@@ -7,6 +7,9 @@ class TaskStats:
         with open(file, 'r', encoding='utf-8') as file:
             self.data = json.load(file)
     #iteruje przez zadania z pliku i zlicza wg statusu
+    def update(self,file):
+        with open(file, 'r', encoding='utf-8') as file:
+            self.data = json.load(file)
     def c_by_status(self):
         status_c = {}
         for task in self.data:
