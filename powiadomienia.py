@@ -71,7 +71,7 @@ class SendingReminder:
 
                     msg=msg.as_string()
                 )
-            print("Email sent!")
+            #print("Email sent!")
         except Exception as e:
             print(f"Wystąpił błąd podczas wysyłania e-maila: {e}")
 
@@ -84,15 +84,14 @@ class SendingReminder:
         today = dt.date.today()
         tomorrow = today +  dt.timedelta(days=1)
         godz = dt.datetime.now().strftime("%H:%M")
-        print(f"Dzisiejsza data: {today.isoformat()}")
-        zadania = tasks_data.get('zadania', [])
+        zadania = tasks_data
         for zadanie in zadania:
             email = zadanie.get('email')
             termin = zadanie.get("termin")
             godzina = zadanie.get("godzina")
-            kategoria = zadanie.get("kategoria")
-
+            status = zadanie.get("status")
             opis = zadanie.get("opis")
+            kategoria = zadanie.get("kategoria")
             typ_priorytetu = zadanie.get("priorytet")
             if typ_priorytetu == "wysoki":
                 priorytet = "[Wysoki priorytet] REMINDER:"
@@ -104,20 +103,21 @@ class SendingReminder:
                 priorytet = "Reminder:"
                 color = "green"
 
-            if termin == today.isoformat() and godz == godzina:
-                print(f"Wysyłanie przypomnienia dla zadania: {opis}")
+            if termin == today.isoformat() and godz == godzina and status == "nie zrobione":
+                #print(f"Wysyłanie przypomnienia dla zadania: {opis}")
                 message_body = f"""
-                Zadanie: <b>{opis} z kategorii: {kategoria}</b><br>
-                Data: <i>{termin}</i>
+                Zadanie do zrobienia ---> <b>{opis} </b>
+                Kategoria: <b>{kategoria}</b><br>
+                Termin wykonania: <i>{termin}</i>
                 """
 
                 self.send_email(subject=priorytet, message=message_body, color=color, user_email=email)
-            if termin == tomorrow.isoformat() and typ_priorytetu == "wysoki":
-                print(f"Wysyłanie przypomnienia dla jutrzejszego zadania: {opis}")
+            if termin == tomorrow.isoformat() and godz == godzina and typ_priorytetu == "wysoki" and status == "nie zrobione":
+                #print(f"Wysyłanie przypomnienia dla jutrzejszego zadania: {opis}")
                 message_body = f"""
-                                Zadanie na jutro: <b>{opis} z kategorii: {kategoria}</b><br>
-                                Data: <i>{termin}</i>
-                                Godzina: <i>{godz}</i>
+                                Zadanie na jutro: <b>{opis}</b><br>
+                                Kategoria: <b>{kategoria}</b><br>
+                                Termin wykonania: <i>{termin} o godzinie {godz}.</i>
                                 """
                 self.send_email(subject=priorytet, message=message_body, color=color, user_email=email)
 
